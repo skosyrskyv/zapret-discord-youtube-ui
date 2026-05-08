@@ -1,0 +1,15 @@
+include: package:flutter_lints/flutter.yaml
+analyzer:
+  exclude:
+    - "build/**"
+    - "ios/**"
+    - "android/**"
+    - "test/**"
+    - "lib/generated/**"
+    - "lib/third_party/**"
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "zapret/**"
+
+formatter:
+  trailing_commas: preserve
