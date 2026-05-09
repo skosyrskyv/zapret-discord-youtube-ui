@@ -297,13 +297,13 @@ class MainController extends ChangeNotifier {
 
   Future<void> _initMainScript() async {
     final mainScriptPath = path.join(Directory.current.path, 'main.bat');
-    final mainScriptFileAppFile = File(mainScriptPath);
+    final mainScriptFile = File(mainScriptPath);
 
-    if (mainScriptFileAppFile.existsSync()) return;
+    if (mainScriptFile.existsSync()) return;
 
     try {
       final mainBatContent = await rootBundle.loadString('assets/bin/main.bat');
-      await mainScriptFileAppFile.writeAsString(mainBatContent);
+      await mainScriptFile.writeAsString(mainBatContent);
     } catch (e, stacktrace) {
       log('main.bat init error: $e', stackTrace: stacktrace);
     }
