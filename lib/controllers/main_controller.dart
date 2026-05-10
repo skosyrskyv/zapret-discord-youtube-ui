@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'dart:async';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zapret_ui/main.dart';
 import 'package:zapret_ui/utils/constants.dart';
 import 'package:zapret_ui/utils/downloader.dart';
 
@@ -120,7 +120,7 @@ class MainController extends ChangeNotifier {
       _getAvailableScripts();
       _checkZapretInstalled();
     } catch (e, stacktrace) {
-      log('Download Zapret error: $e', stackTrace: stacktrace);
+      logger.shout('Download Zapret error', e, stacktrace);
     } finally {
       _setIsDownloading(false);
     }
@@ -167,7 +167,7 @@ class MainController extends ChangeNotifier {
       );
       await Future.delayed(Duration(seconds: 2));
     } catch (e, stacktrace) {
-      log('Start zapret error: $e', stackTrace: stacktrace);
+      logger.shout('Start zapret error', e, stacktrace);
     } finally {
       _setIsLoading(false);
     }
@@ -193,7 +193,7 @@ class MainController extends ChangeNotifier {
       );
       await Future.delayed(Duration(seconds: 2));
     } catch (e, stacktrace) {
-      log('Stop zapret error: $e', stackTrace: stacktrace);
+      logger.shout('Stop zapret error:', e, stacktrace);
     } finally {
       _setIsLoading(false);
     }
@@ -229,7 +229,7 @@ class MainController extends ChangeNotifier {
         throw Exception('Zapret directory doesn`t exist');
       }
     } catch (e, stacktrace) {
-      log('Error scanning directory: $e', stackTrace: stacktrace);
+      logger.shout('Error scanning directory', e, stacktrace);
     }
   }
 
@@ -243,9 +243,10 @@ class MainController extends ChangeNotifier {
       final res = result.stdout.toString().contains('winws.exe');
       _setIsRunning(res);
     } catch (e, stacktrace) {
-      log(
-        'Process winws.exe checking status error: $e',
-        stackTrace: stacktrace,
+      logger.shout(
+        'Process winws.exe checking status error',
+        e,
+        stacktrace,
       );
     }
   }
@@ -274,7 +275,7 @@ class MainController extends ChangeNotifier {
         DateTime.now().toIso8601String(),
       );
     } catch (e, stacktrace) {
-      log('Checking new version error: $e', stackTrace: stacktrace);
+      logger.shout('Checking new version error', e, stacktrace);
     }
   }
 
@@ -291,7 +292,7 @@ class MainController extends ChangeNotifier {
       ).readAsString();
       _setVersion(zapretVersion);
     } catch (e, stacktrace) {
-      log('Directory reading error: $e', stackTrace: stacktrace);
+      logger.shout('Directory reading error', e, stacktrace);
     }
   }
 
@@ -305,7 +306,7 @@ class MainController extends ChangeNotifier {
       final mainBatContent = await rootBundle.loadString('assets/bin/main.bat');
       await mainScriptFile.writeAsString(mainBatContent);
     } catch (e, stacktrace) {
-      log('main.bat init error: $e', stackTrace: stacktrace);
+      logger.shout('main.bat init error', e, stacktrace);
     }
   }
 
