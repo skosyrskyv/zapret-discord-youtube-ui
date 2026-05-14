@@ -1,7 +1,10 @@
 @echo off
 setlocal enabledelayedexpansion
 
-cd /d "%~dp0/zapret"
+set "SCRIPT_DIR=%~dp0"
+set "BASE_DIR=%SCRIPT_DIR%..\"
+
+cd /d "%BASE_DIR%/zapret"
 
 call :load_user_lists
 call :ipset_switch_status
@@ -23,8 +26,8 @@ cls
 chcp 437 > nul
 
 :: Main
-set "BIN_PATH=%~dp0\zapret\bin\"
-set "LISTS_PATH=%~dp0\zapret\lists\"
+set "BIN_PATH=%BASE_DIR%\zapret\bin\"
+set "LISTS_PATH=%BASE_DIR%\zapret\lists\"
 
 set "selectedFile=%~1"
 if not defined selectedFile (
@@ -76,13 +79,13 @@ for /f "tokens=*" %%a in ('type "!selectedFile!"') do (
                     if !errorlevel!==0 (
                         set "arg=\!QUOTE!!arg!\!QUOTE!"
                     ) else if "!arg:~0,1!"=="@" (
-                        set "arg=\!QUOTE!@%~dp0\zapret\!arg:~1!\!QUOTE!"
+                        set "arg=\!QUOTE!@%BASE_DIR%\zapret\!arg:~1!\!QUOTE!"
                     ) else if "!arg:~0,5!"=="%%BIN%%" (
                         set "arg=\!QUOTE!!BIN_PATH!!arg:~5!\!QUOTE!"
                     ) else if "!arg:~0,7!"=="%%LISTS%%" (
                         set "arg=\!QUOTE!!LISTS_PATH!!arg:~7!\!QUOTE!"
                     ) else (
-                        set "arg=\!QUOTE!%~dp0\zapret\!arg!\!QUOTE!"
+                        set "arg=\!QUOTE!%BASE_DIR%\zapret\!arg!\!QUOTE!"
                     )
                 ) else if "!arg:~0,12!" EQU "%%GameFilter%%" (
                     set "arg=%GameFilter%"
@@ -181,7 +184,7 @@ exit /b
 
 :: LOAD USER LISTS =====================
 :load_user_lists
-set "LISTS_PATH=%~dp0\zapret\lists\"
+set "LISTS_PATH=%BASE_DIR%\zapret\lists\"
 
 if not exist "%LISTS_PATH%ipset-exclude-user.txt" (
     echo 203.0.113.113/32>"%LISTS_PATH%ipset-exclude-user.txt"
@@ -199,7 +202,7 @@ exit /b
 :ipset_switch_status
 chcp 437 > nul
 
-set "listFile=%~dp0\zapret\lists\ipset-all.txt"
+set "listFile=%BASE_DIR%\zapret\lists\ipset-all.txt"
 for /f %%i in ('type "%listFile%" 2^>nul ^| find /c /v ""') do set "lineCount=%%i"
 
 if !lineCount!==0 (
@@ -219,7 +222,7 @@ exit /b
 :game_switch_status
 chcp 437 > nul
 
-set "gameFlagFile=%~dp0\zapret\utils\game_filter.enabled"
+set "gameFlagFile=%BASE_DIR%\zapret\utils\game_filter.enabled"
 
 if not exist "%gameFlagFile%" (
     set "GameFilterStatus=disabled"
@@ -257,7 +260,7 @@ exit /b
 :check_updates_switch_status
 chcp 437 > nul
 
-set "checkUpdatesFlag=%~dp0\zapret\utils\check_updates.enabled"
+set "checkUpdatesFlag=%BASE_DIR%\zapret\utils\check_updates.enabled"
 
 if exist "%checkUpdatesFlag%" (
     set "CheckUpdatesStatus=enabled"

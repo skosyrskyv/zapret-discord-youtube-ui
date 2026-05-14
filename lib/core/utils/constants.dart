@@ -8,10 +8,13 @@ abstract class WebLinks {
 
 abstract class Constants {
   static const String zapretFolderName = 'zapret';
+  static const String serviceFileName = 'zapret_ui_service.bat';
+  static const String serviceFilePath = 'bin\\$serviceFileName';
+  static const String assetsPath = 'assets';
 }
 
 abstract class PrefsKeys {
-  static const String lastSelectedScript = 'last_selected_script';
+  static const String selectedScript = 'selected_script';
   static const String installedZapretVersion = 'installed_zapret_version';
   static const String remoteZapretVersion = 'remote_zapret_version';
   static const String lastVersionFetchDateTime = 'last_version_fetch_datetime';

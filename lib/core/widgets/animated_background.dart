@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 import 'package:flutter/scheduler.dart';
-import 'package:zapret_ui/widgets/fade_in_animation.dart';
+import 'package:zapret_ui/core/widgets/fade_in_animation.dart';
 
 class AnimatedBackground extends StatefulWidget {
   const AnimatedBackground({
@@ -79,7 +79,9 @@ class PerlinNoiseState extends State<AnimatedBackground>
 
   @override
   void didUpdateWidget(covariant AnimatedBackground oldWidget) {
-    perlinNoisePainter = _createPainter();
+    setState(() {
+      perlinNoisePainter = _createPainter();
+    });
     super.didUpdateWidget(oldWidget);
   }
 
@@ -92,13 +94,13 @@ class PerlinNoiseState extends State<AnimatedBackground>
 
   @override
   Widget build(BuildContext context) {
-    return FadeInAnimation(
+    return FadeAnimation(
+      playWhenRebuilds: true,
+      fadeInDuration: Duration(seconds: 1),
+      fadeInDelay: Duration(milliseconds: 500),
       child: ClipRect(
         child: CustomPaint(
-          painter: (widget.isInBackground) ? perlinNoisePainter : null,
-          foregroundPainter: (widget.isInBackground)
-              ? null
-              : perlinNoisePainter,
+          painter: perlinNoisePainter,
           child: Container(
             alignment: widget.alignment,
             child: widget.child,

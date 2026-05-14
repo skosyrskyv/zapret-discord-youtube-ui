@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:archive/archive.dart';
-import 'package:path/path.dart' as path;
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 class GitHubRepoDownloader {
   /// Скачивает ZIP-архив репозитория и распаковывает его
@@ -14,21 +15,22 @@ class GitHubRepoDownloader {
   ) async {
     try {
       String zipUrl = _getZipUrl(repoUrl);
-      String programDir = Directory.current.path;
-      String targetPath = path.join(programDir, targetFolderName);
-      Directory targetDirectory = Directory(targetPath);
-      String tempZipPath = path.join(programDir, 'temp_repo.zip');
+      Directory tempDir = await getTemporaryDirectory();
+      Directory appCacheDir = await getApplicationCacheDirectory();
+      Directory targetDir = Directory(join(appCacheDir.path, targetFolderName));
 
-      if (await targetDirectory.exists()) {
-        await targetDirectory.delete(recursive: true);
+      String tempZipPath = join(tempDir.path, 'temp_repo.zip');
+
+      if (await targetDir.exists()) {
+        await targetDir.delete(recursive: true);
       }
+      await targetDir.create(recursive: true);
 
-      await targetDirectory.create(recursive: true);
       await _downloadFile(zipUrl, tempZipPath);
-      await _extractZip(tempZipPath, targetPath);
+      await _extractZip(tempZipPath, targetDir.path);
 
-      File(tempZipPath).delete();
-      return targetPath;
+      await File(tempZipPath).delete();
+      return targetDir.path;
     } catch (e) {
       throw Exception('Ошибка при скачивании/распаковке: $e');
     }
@@ -96,7 +98,7 @@ class GitHubRepoDownloader {
         }
 
         if (relativePath.isNotEmpty) {
-          String fullPath = path.join(targetPath, relativePath);
+          String fullPath = join(targetPath, relativePath);
           File(fullPath).createSync(recursive: true);
           List<int>? content = file.content;
           await File(fullPath).writeAsBytes(content);

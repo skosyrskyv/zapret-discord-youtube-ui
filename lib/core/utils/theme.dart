@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  ThemeData get light => ThemeData.light(useMaterial3: true);
+  final AppColorScheme _colorScheme = AppColorScheme();
 
   ThemeData get dark => ThemeData(
     useMaterial3: true,
-    colorScheme: AppColorScheme().dark,
+    colorScheme: _colorScheme.dark,
+    highlightColor: Colors.transparent,
+    splashColor: const Color.fromARGB(31, 80, 80, 80),
   );
 }
 
