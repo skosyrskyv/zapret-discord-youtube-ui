@@ -10,7 +10,7 @@
 
 
 
-<img src="screenshots/image.png" alt="Главное окно" width="60%">
+<img src="screenshots/screenshot.png" alt="Главное окно" width="60%">
 
 ## Описание
 
