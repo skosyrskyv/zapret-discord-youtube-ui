@@ -63,7 +63,7 @@ class _ScriptsListState extends State<ScriptsList> {
               Expanded(
                 child: Text(
                   _state.selectedScript?.nameWithoutExtension.capitalize() ??
-                      'Выберете скрипт',
+                      'Выберете стратегию',
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                   ),
