@@ -45,6 +45,8 @@ flutter:
   assets:
     - assets/fonts/
     - assets/bin/
+    - assets/bin/zapret_ui_service.bat
+
 
   fonts:
     - family: CustomIcons

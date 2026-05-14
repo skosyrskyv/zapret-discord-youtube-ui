@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
 import 'package:path/path.dart';
@@ -28,6 +29,8 @@ class InstallerRepository {
     await installMainScript();
   }
 
+  // Скачивает с репозитория запрета файл version.txt и достают оттуда версию.
+  // Частые запросы делать нельзя тк git кидает в бан лист.
   Future<String?> getRemoteVersion() async {
     try {
       int? diff;
@@ -77,6 +80,7 @@ class InstallerRepository {
     }
   }
 
+  // Ищет в папке с установленным запретом файл version.txt и берет из него версию.
   Future<String?> getLocalVersion() async {
     try {
       final zapretPath = join(
@@ -120,19 +124,19 @@ class InstallerRepository {
         Constants.serviceFilePath,
       );
 
-      final sourceFilePath = join(
-        Directory.current.path,
-        Constants.assetsPath,
-        Constants.serviceFilePath,
+      final byteData = await rootBundle.load(
+        // не понимает путь с "\" слешами
+        join(
+          Constants.assetsPath,
+          Constants.serviceFilePath,
+        ).replaceAll('\\', '/'),
       );
+      final bytes = byteData.buffer.asUint8List();
 
-      final targetDir = Directory(dirname(targetFilePath));
+      final targetFile = File(targetFilePath);
+      await targetFile.parent.create(recursive: true);
 
-      if (!(await targetDir.exists())) {
-        await targetDir.create();
-      }
-
-      await File(sourceFilePath).copy(targetFilePath);
+      await File(targetFilePath).writeAsBytes(bytes);
     } catch (e) {
       rethrow;
     }
