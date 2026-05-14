@@ -128,7 +128,7 @@ class __PowerIconState extends State<_PowerIcon>
   void initState() {
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 1),
+      duration: const Duration(milliseconds: 400),
     );
     _colorAnimation = ColorTween(
       begin: widget.powerOffColor,
@@ -147,9 +147,9 @@ class __PowerIconState extends State<_PowerIcon>
   void didUpdateWidget(covariant _PowerIcon oldWidget) {
     if (oldWidget.isRunning != widget.isRunning) {
       if (widget.isRunning) {
-        _controller.forward();
+        _turnOn();
       } else {
-        _controller.reverse();
+        _turnOff();
       }
     }
     super.didUpdateWidget(oldWidget);
@@ -167,6 +167,16 @@ class __PowerIconState extends State<_PowerIcon>
         ),
       ),
     );
+  }
+
+  Future<void> _turnOn() async {
+    await Future.delayed(Duration(milliseconds: 800));
+    _controller.forward();
+  }
+
+  Future<void> _turnOff() async {
+    await Future.delayed(Duration(milliseconds: 500));
+    _controller.reverse();
   }
 }
 
@@ -192,8 +202,8 @@ class _LoadingCircle extends StatelessWidget {
         padding: const EdgeInsets.all(11.0),
         child: FadeAnimation(
           show: isLoading,
-          fadeInDuration: Duration(seconds: 1),
-          fadeOutDuration: Duration(seconds: 1),
+          fadeInDuration: Duration(milliseconds: 500),
+          fadeOutDuration: Duration(milliseconds: 500),
           child: CircularProgressIndicator(
             color: powerOnColor,
             strokeWidth: 6,
