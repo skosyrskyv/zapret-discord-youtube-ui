@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Обертка над ChangeNotifier. Удобно использовать для контроллеров.
 base class StateController extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
